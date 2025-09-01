@@ -152,7 +152,7 @@ functionality.
 
 
 /*-------------------- Defines ---------------------------------------*/
-#define QUEUE_LENGTH 1
+#define QUEUE_LENGTH 10
 #define RED  	0
 #define AMBER  	1
 #define GREEN  	2
@@ -350,7 +350,7 @@ static void Traffic_Display_Task(void *pvParameters) {
 		} else if (xTimerIsTimerActive(xRedLedTimer) || xTimerIsTimerActive(xAmberLedTimer)) { // In red/Amber light state
 
 			for (int i = 18; i >= 8; i--) // Shift all cars after the stop line.
-				cars[i+1] = cars[i];
+				cars[i] = cars[i-1];
 
 			cars[8] = 0;
 
@@ -374,7 +374,7 @@ static void Traffic_Display_Task(void *pvParameters) {
 		for (int16_t i = 18; i >= 0; i--) // Display all cars on LEDs.
 			SPC_Output(cars[i]);
 
-		vTaskDelay(1000);
+		vTaskDelay(pdMS_TO_TICKS(1000));
 
 	}
 }
@@ -589,4 +589,5 @@ static void prvSetupHardware( void )
 	/* TODO: Setup the clocks, etc. here, if they were not configured before
 	main() was called. */
 }
+
 
